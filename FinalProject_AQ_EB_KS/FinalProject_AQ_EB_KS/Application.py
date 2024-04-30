@@ -1,14 +1,26 @@
 from RentalShop import RentalShop
 from Customer import Customer
+import msvcrt
+
 
 # ---------------------------------------------------------------
-# Set up the Ski and Snowboard Shop inventory
+# Function to set up the Ski and Snowboard Shop inventory
 # ---------------------------------------------------------------
 
 def SetUp_ShopInventory(intTotalSkis, intTotalSnowboards):
     Inventory = RentalShop(intTotalSkis, intTotalSnowboards)
+    print("Bob's Skis and Snowboards Shop is now open!\n")
     print("There are ", intTotalSkis, " skis and ", intTotalSnowboards, " in the inventory.")
-    print("Bob's Skis and Snowboards Shop is now open!")
+    print("===========================================\n")
+
+# ---------------------------------------------------------------
+# Function to Display Navigational Selection
+# ---------------------------------------------------------------
+def NavigationalSelection(intNavigate):
+    intNavigate = input("For New Customer Rental, enter 1.\n To Return Rental, enter 2.\n To Display Inventory, enter 3. \n To Close Shop at End of Day, enter 4.\n")
+    intNavigate = Validate_Navigation(intNavigate)
+    if intNavigate < 5:
+        return intNavigate
 
 # ---------------------------------------------------------------
 # Validation Functions
@@ -40,27 +52,62 @@ def Validate_InitialSnowboards(intInput):
         print("Number of snowboards must be numeric.")
     return intInput
 
+def Validate_Navigation(intInput):
+    try:
+        intInput = int(intInput)
+        if 0 < intInput < 5:
+            return intInput
+        else:
+            print("Selection must be 1, 2, 3, or 4.")
+    except ValueError:
+        intInput = int(0)
+        print("Selection must be 1, 2, 3, or 4.")
+
 # ---------------------------------------------------------------
+#
 # Main Control
+#
 # ---------------------------------------------------------------
 
+# ---------------------------------------------------------------
 # Declare Variables
+# ---------------------------------------------------------------
 
 strInitialSkisFlag = bool(False)
 strInitialSnowboardsFlag = bool(False)
+strNavigateFlag = bool(False)
+intNavigate = int()
 
-# Get and Validate Inputs
+# ---------------------------------------------------------------
+# Get and Validate RentalShop Class Inputs
+# ---------------------------------------------------------------
 
 while strInitialSkisFlag is False:
     intTotalSkis = input("Enter Number of Skis in Inventory: ")
     intTotalSkis = Validate_InitialSkis(intTotalSkis)
 
-strInitialInventoryFlag = bool(False)
-
 while strInitialSnowboardsFlag is False:
     intTotalSnowboards = input("Enter Number of Snowboards in Inventory: ")
     intTotalSnowboards = Validate_InitialSnowboards(intTotalSnowboards)
 
+# ---------------------------------------------------------------
 # Call Functions
+# ---------------------------------------------------------------
 
+# Call function to instantiate class RentalShop
 SetUp_ShopInventory(intTotalSkis, intTotalSnowboards)
+
+# Get intNavigate to determine next action
+#(1 for new customer rental, 2 for return rental, 3 for inventory display, 4 for close shop)
+intNavigate = NavigationalSelection(0)
+
+# Depending on action selected, call appropriate function
+#if intNavigate == 1:
+    # add new customer to a list of customers
+#    Customer()
+#    if intNavigate == 2:
+#        ReturnRental()
+#        if intNavigate == 3:
+#            DisplayInventory()
+#            if intNavigate == 4:
+#                CloseShop()
