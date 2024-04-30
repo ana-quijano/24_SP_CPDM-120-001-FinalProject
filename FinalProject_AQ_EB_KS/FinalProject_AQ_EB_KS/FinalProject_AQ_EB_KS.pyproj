@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>b25fd051-1f1e-4b20-90e2-edc4128b5cbe</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>FinalProject_AQ_EB_KS.py</StartupFile>
+    <StartupFile>Application.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -24,7 +24,7 @@
     <Compile Include="Customer.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FinalProject_AQ_EB_KS.py" />
+    <Compile Include="Application.py" />
     <Compile Include="RentalShop.py">
       <SubType>Code</SubType>
     </Compile>
