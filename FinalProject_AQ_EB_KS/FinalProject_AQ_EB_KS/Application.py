@@ -7,11 +7,12 @@ import msvcrt
 # Function to set up the Ski and Snowboard Shop inventory
 # ---------------------------------------------------------------
 
-def SetUp_ShopInventory(intTotalSkis, intTotalSnowboards):
+def SetUp_ShopInventory(intTotalSkis, intTotalSnowboards, blnShopOpen):
     Inventory = RentalShop(intTotalSkis, intTotalSnowboards)
     print("Bob's Skis and Snowboards Shop is now open!\n")
-    print("There are ", intTotalSkis, " skis and ", intTotalSnowboards, " in the inventory.")
-    print("===========================================\n")
+    print("There are ", intTotalSkis, " skis and ", intTotalSnowboards, " in the inventory.\n")
+    blnShopOpen = True
+    return blnShopOpen
 
 # ---------------------------------------------------------------
 # Function to Display Navigational Selection
@@ -39,10 +40,18 @@ def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, st
     intSkis = input("Number of Skis: ")
     intSnowboards = input("Numbber of Snowboards: ")
     print("strRentalRate: ", strRentalRate)
-    # Waiting in Team C feedback to run these next three lines, something's up with their variable names
-    # print (strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards)
+    print (strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalRate, intTime, intSkis, intSnowboards)
     dblEstimate = RentalShop.CalculateEstimate(strRentalRate, intSkis, intSnowboards, intTime, strCouponCode)
     print("Rental Price Estimate: ", dblEstimate)
+    print("")
+
+# ---------------------------------------------------------------
+# Function to Return Rental
+# ---------------------------------------------------------------
+
+def ReturnRental():
+    print("Under construction.\n")
+
 
 # ---------------------------------------------------------------
 # Function to Display Current Inventory
@@ -55,6 +64,16 @@ def DisplayInventory(intAvailableSkis, intAvailableSnowboards):
     print("Current Inventory")
     print("  Available Skis: ", intAvailableSkis)
     print("  Available Snowboards: ", intAvailableSnowboards)
+    print("")
+
+# ---------------------------------------------------------------
+# Function to Close Shop
+# ---------------------------------------------------------------
+
+def CloseShop(blnShopOpen):
+    print("Shop is now closed.\n")
+    blnShopOpen = False
+    return blnShopOpen
 
 
 # ---------------------------------------------------------------
@@ -108,10 +127,12 @@ def Validate_Navigation(intInput):
 # Declare Variables
 # ---------------------------------------------------------------
 
+blnShopOpen = bool(False)
 strInitialSkisFlag = bool(False)
 strInitialSnowboardsFlag = bool(False)
 strNavigateFlag = bool(False)
 intNavigate = int()
+intMain = int(1)
 
 # ---------------------------------------------------------------
 # Get and Validate RentalShop Class Inputs
@@ -130,14 +151,15 @@ while strInitialSnowboardsFlag is False:
 # ---------------------------------------------------------------
 
 # Call function to instantiate class RentalShop
-SetUp_ShopInventory(intTotalSkis, intTotalSnowboards)
+SetUp_ShopInventory(intTotalSkis, intTotalSnowboards, blnShopOpen)
 
 # Get intNavigate to determine next action
 #(1 for new customer rental, 2 for return rental, 3 for inventory display, 4 for close shop)
-intNavigate = NavigationalSelection(0)
+# intNavigate = NavigationalSelection(intNavigate)
 
 # Depending on action selected, call appropriate function
-# This does not work yet
+intNavigate = NavigationalSelection(intNavigate)
+
 if intNavigate == 1:
     # add new customer to a list of customers
     NewCustomerRental(strFirstName = "", strLastName = "", strIDNumber = "", strPhoneNumber = "", strCouponCode = "", strRentalRate = "", intTime = 0, intSkis = 0, intSnowboards = 0, dblEstimate = 0)
@@ -153,3 +175,4 @@ else:
             # This does not work yet
             if intNavigate == 4:
                 CloseShop()
+                
