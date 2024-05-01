@@ -19,9 +19,29 @@ def SetUp_ShopInventory(intTotalSkis, intTotalSnowboards):
 def NavigationalSelection(intNavigate):
     intNavigate = input("For New Customer Rental, enter 1.\n To Return Rental, enter 2.\n To Display Inventory, enter 3. \n To Close Shop at End of Day, enter 4.\n")
     intNavigate = Validate_Navigation(intNavigate)
-    if intNavigate < 5:
-        return intNavigate
+    return intNavigate 
 
+def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards, dblEstimate):
+    print("Enter Customer Rental Request Details Details\n")
+    strFirstName = input("First Name: ")
+    strLastName = input("Last Name: ")
+    strIDNumber = input("ID Number: ")
+    strPhoneNumber = input("Phone Number: ")
+    strCouponCode = input("Coupon Code: ")
+    strRentalRate = input("Rental Period (Hourly, Daily, or Weekly): ")
+    if strRentalPeriod == "hourly":
+        intTime = input("Rental Time, in hours: ")
+    else:
+        if strRentalPeriod == "daily":
+            intTime = input("Rental Time, in Days: ")
+        else:
+            intTime = input("Rental Time, in weeks: ")
+    intSkis = input("Number of Skis: ")
+    intSnowboards = input("Numbber of Snowboards: ")
+    dblEstimate = RentalShop.CalculateEstimate(strRentalPeriod, intSkis, intSnowboards, intTime, strCouponCode)
+    print (strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards)
+    print ("Rental Price Estimate: ", dblEstimate)
+    
 # ---------------------------------------------------------------
 # Validation Functions
 # ---------------------------------------------------------------
@@ -102,12 +122,12 @@ SetUp_ShopInventory(intTotalSkis, intTotalSnowboards)
 intNavigate = NavigationalSelection(0)
 
 # Depending on action selected, call appropriate function
-#if intNavigate == 1:
+if intNavigate == 1:
     # add new customer to a list of customers
-#    Customer()
-#    if intNavigate == 2:
-#        ReturnRental()
-#        if intNavigate == 3:
-#            DisplayInventory()
-#            if intNavigate == 4:
-#                CloseShop()
+    NewCustomerRental(strFirstName = "", strLastName = "", strIDNumber = "", strPhoneNumber = "", strCouponCode = "", strRentalPeriod = "", intTime = 0, intSkis = 0, intSnowboards = 0, dblEstimate = 0)
+    if intNavigate == 2:
+        ReturnRental()
+        if intNavigate == 3:
+            DisplayInventory()
+            if intNavigate == 4:
+                CloseShop()
