@@ -1,5 +1,6 @@
 from RentalShop import RentalShop
 from Customer import Customer
+import msvcrt
 
 
 # ---------------------------------------------------------------
@@ -16,18 +17,19 @@ def SetUp_ShopInventory(intTotalSkis, intTotalSnowboards):
 # Function to Display Navigational Selection
 # ---------------------------------------------------------------
 def NavigationalSelection(intNavigate):
-    intNavigate = input("For New Customer Rental, enter 1.\n To Return Rental, enter 2.\n To Display Inventory, enter 3. \n To Close Shop at End of Day, enter 4.\n")
+    intNavigate = input("For New Customer Rental, enter 1.\nTo Return Rental, enter 2.\nTo Display Inventory, enter 3. \nTo Close Shop at End of Day, enter 4.\n")
     intNavigate = Validate_Navigation(intNavigate)
     return intNavigate 
 
 def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards, dblEstimate):
-    print("Enter Customer Rental Request Details Details\n")
+    print("")
+    print("Enter Customer Rental Request Details Details")
     strFirstName = input("First Name: ")
     strLastName = input("Last Name: ")
     strIDNumber = input("ID Number: ")
     strPhoneNumber = input("Phone Number: ")
     strCouponCode = input("Coupon Code: ")
-    strRentalRate = input("Rental Period (Hourly, Daily, or Weekly): ")
+    strRentalPeriod = input("Rental Period (Hourly, Daily, or Weekly): ")
     if strRentalPeriod == "hourly":
         intTime = input("Rental Time, in hours: ")
     else:
@@ -37,10 +39,10 @@ def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, st
             intTime = input("Rental Time, in weeks: ")
     intSkis = input("Number of Skis: ")
     intSnowboards = input("Numbber of Snowboards: ")
-    dblEstimate = RentalShop.CalculateEstimate(strRentalPeriod, intSkis, intSnowboards, intTime, strCouponCode)
-    print (strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards)
-    print ("Rental Price Estimate: ", dblEstimate)
-    
+    # Waiting in Team C feedback to run these next three lines, something's up with their variable names
+    # print (strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards)
+    # dblEstimate = RentalShop.CalculateEstimate(strRentalPeriod, intSkis, intSnowboards, intTime, strCouponCode)
+    # print ("Rental Price Estimate: ", dblEstimate)
 # ---------------------------------------------------------------
 # Validation Functions
 # ---------------------------------------------------------------
