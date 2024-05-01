@@ -1,6 +1,5 @@
 from RentalShop import RentalShop
 from Customer import Customer
-import msvcrt
 
 
 # ---------------------------------------------------------------
