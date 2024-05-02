@@ -144,13 +144,17 @@ def ReturnRental(Customers):
             strCouponCode = obj._strCouponCode
 
             # Get time rented and time returned
-            now = datetime.now()
-            dtmDateTimeRented = now.strftime("%m/%d/%Y %H:%M")
+            intDays = int(input("How many days ago did your rental start? "))
+            intHours = int(input("How many hours ago did your rental start? "))
+            dtmRentalStart = (datetime.now() + timedelta(days=-intDays) + timedelta(hours=-intHours))
+            dtmRentalStart = str(dtmRentalStart)[:-10]
+            dtmRentalStart = datetime.strptime(dtmRentalStart, "%Y-%m-%d %H:%M")
 
-            dtmDateTimeReturned = timedelta(hours=-2)
+            now = datetime.now()
+            dtmDateTimeReturned = now.strptime(dtmDateTimeReturned, "%Y-%m-%d %H:%M")
 
             ## Get Subtotal, DiscountTotal, Total
-            #(dblSubtotal, dblDiscountTotal, dblTotal) = Inventory.CalculateBill(dtmDateTimeRented, dtmDateTimeReturned, intSkis, intSnowboards, strCouponCode)
+            # (dblSubtotal, dblDiscountTotal, dblTotal) = Inventory.CalculateBill(dtmRentalStart, dtmDateTimeReturned, intSkis, intSnowboards, strCouponCode)
 
             # Display Invoice
             print("")
@@ -158,9 +162,9 @@ def ReturnRental(Customers):
             print("Skis Rented: ", intSkis)
             print("Snowboards Rented: ", intSnowboards)
             print("Total Time of Rental: ")
-            print("Subtotal: ")
-            print("Discount: ")
-            print("Total: ")
+            print("Subtotal: ", dblSubtotal)
+            print("Discount: ", dblTotalDiscount)
+            print("Total: ", dblTotal)
 
             # Return rented skis and snowboards to inventory
             obj.ReturnItems()
