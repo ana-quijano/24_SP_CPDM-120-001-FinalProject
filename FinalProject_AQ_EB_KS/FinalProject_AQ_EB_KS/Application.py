@@ -25,14 +25,18 @@ def Menu(intNavigate):
     intNavigate = Validate_Navigation(intNavigate)
     MenuSelect(intNavigate)
 
+# ---------------------------------------------------------------
+# Function to Call NewCustomerRental, ReturnRental, DisplayInventory, or CloseShop
+# ---------------------------------------------------------------
+
 def MenuSelect(intNavigate):
     if intNavigate == 1:
     # Collect New Customer Rental Inputs
-        NewCustomerRental(strFirstName = "", strLastName = "", strIDNumber = "", strPhoneNumber = "", strCouponCode = "", strRentalPeriod = "", intTime = 0, intSkis = 0, intSnowboards = 0)
+        NewCustomerRental(Customers, strFirstName = "", strLastName = "", strIDNumber = "", strPhoneNumber = "", strCouponCode = "", strRentalPeriod = "", intTime = 0, intSkis = 0, intSnowboards = 0)
     else:
         # This does not work yet
         if intNavigate == 2:
-            ReturnRental()
+            ReturnRental(Customers)
         else:
             # This works!
             if intNavigate == 3:
@@ -51,7 +55,7 @@ def MenuSelect(intNavigate):
 # Function to Begin New Customer Rental
 # ---------------------------------------------------------------
 
-def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards):
+def NewCustomerRental(Customers, strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards):
     print("")
     print("Enter Customer Rental Details")
     strFirstName = input("First Name: ")
@@ -71,41 +75,51 @@ def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, st
     intAvailableSkis = int()
     intAvailableSnowboards = int()
 
-    # I am just laying out the logic
-    # I don't know how to put each new customer into a list
-    # ----------------------------------------------------------------------------
+
+    # Instantiate customer class
+    #customer = Customer(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod)
 
     # Add object to list Customers
     Customers.append(Customer(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod))
-    # print(Customers[0].strFirstName)
 
     # Give estimate
     dblEstimate = Inventory.CalculateEstimate(strRentalPeriod, intSkis, intSnowboards, intTime, strCouponCode)
     print("Rental Price Estimate: ", dblEstimate)
+
     # Confirm rental
-    strStartRental = input("Would you like to start your rental? Y/N: ")
+    strStartRental = input("Start Rental? Y/N: ")
     if strStartRental == 'Y':
+
+        # Get index of latest customer added to list
+        intLastCustomer = (len(Customers)) - 1
+        
         # Attempt to start rental based on availability
-        blnSuccessfulRental = customer.RentItems(intSkis, intSnowboards)
+        blnSuccessfulRental = Customers[intLastCustomer].RentItems(intSkis, intSnowboards)
         if blnSuccessfulRental == True:
+
             # Skis/Snowboards available, get starting rental time
             now = datetime.now()
             dtmDateTimeRented = now.strftime("%m/%d/%Y %H:%M")
             print("")
-            print("Your rental has started. Time: ", dtmDateTimeRented)
+            print("Rental has started. Time: ", dtmDateTimeRented)
+
         else:
+
             # Display available skis and snowboards and ask to try again.
             intAvailableSkis = RentalShop.GetAvailableSkis()
             intAvailableSnowboards = RentalShop.GetAvailableSnowboards()
             print("")
-            print("Sorry, we only have ", intAvailableSkis, " skis and ", intAvailableSnowboards, " snowboards available.")
+            print("Sorry, only ", intAvailableSkis, " skis and ", intAvailableSnowboards, " snowboards are available.")
+
             # Give option to try another rental
             intNavigate = input("Enter 1 to try another rental.")
             MenuSelect(1)
+
     else:
+
         # Do not continue with rental, option to go back to main menu
         intNavigate = input("Enter 0 to go back to Main Menu.")
-        MenuSelect(0)
+        MenuSelect(intNavigate)
 
     intNavigate = input("Enter 0 to go back to Main Menu.")
     Menu(intNavigate) 
@@ -116,8 +130,14 @@ def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, st
 # Function to Return Rental
 # ---------------------------------------------------------------
 
-def ReturnRental():
-    print("...")
+def ReturnRental(Customers):
+    strPhoneNumber = input("Enter phone number: ")
+    for obj in Customers:
+        if strPhoneNumber == obj.strPhoneNumber:
+            print(obj.FirstName)
+    print("")
+    intNavigate = input("Enter 0 to go back to Main Menu.")
+    Menu(intNavigate) 
 
 
 
