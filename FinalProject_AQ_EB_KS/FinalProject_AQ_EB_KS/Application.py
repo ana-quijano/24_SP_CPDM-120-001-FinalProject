@@ -1,6 +1,8 @@
 from RentalShop import RentalShop
 from Customer import Customer
-from datetime import datetime
+import datetime
+from datetime import datetime, timedelta
+
 
 
 # ---------------------------------------------------------------
@@ -25,18 +27,15 @@ def Menu(intNavigate):
     intNavigate = Validate_Navigation(intNavigate)
     MenuSelect(intNavigate)
 
-# ---------------------------------------------------------------
-# Function to Call NewCustomerRental, ReturnRental, DisplayInventory, or CloseShop
-# ---------------------------------------------------------------
-
 def MenuSelect(intNavigate):
     if intNavigate == 1:
     # Collect New Customer Rental Inputs
-        NewCustomerRental(Customers, strFirstName = "", strLastName = "", strIDNumber = "", strPhoneNumber = "", strCouponCode = "", strRentalPeriod = "", intTime = 0, intSkis = 0, intSnowboards = 0)
+        NewCustomerRental(strFirstName = "", strLastName = "", strIDNumber = "", strPhoneNumber = "", strCouponCode = "", strRentalPeriod = "", intTime = 0, intSkis = 0, intSnowboards = 0)
     else:
         # This does not work yet
         if intNavigate == 2:
-            ReturnRental(Customers)
+            strIDNumber = input("What is your phone number? ")
+            ReturnRental(strIDNumber)
         else:
             # This works!
             if intNavigate == 3:
@@ -55,13 +54,13 @@ def MenuSelect(intNavigate):
 # Function to Begin New Customer Rental
 # ---------------------------------------------------------------
 
-def NewCustomerRental(Customers, strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards):
+def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards):
     print("")
     print("Enter Customer Rental Details")
     strFirstName = input("First Name: ")
     strLastName = input("Last Name: ")
-    strIDNumber = input("ID Number: ")
     strPhoneNumber = input("Phone Number: ")
+    strIDNumber = strPhoneNumber
     strCouponCode = input("Coupon Code: ")
     strRentalPeriod = input("Rental Period (Hourly, Daily, or Weekly): ")
     intTime = int(input("Rental Time: "))
@@ -75,51 +74,42 @@ def NewCustomerRental(Customers, strFirstName, strLastName, strIDNumber, strPhon
     intAvailableSkis = int()
     intAvailableSnowboards = int()
 
-
-    # Instantiate customer class
-    #customer = Customer(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod)
+    # I am just laying out the logic
+    # I don't know how to put each new customer into a list
+    # ----------------------------------------------------------------------------
 
     # Add object to list Customers
     Customers.append(Customer(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod))
+    # print(Customers[0].strFirstName)
 
     # Give estimate
     dblEstimate = Inventory.CalculateEstimate(strRentalPeriod, intSkis, intSnowboards, intTime, strCouponCode)
     print("Rental Price Estimate: ", dblEstimate)
-
     # Confirm rental
-    strStartRental = input("Start Rental? Y/N: ")
-    if strStartRental.upper == 'Y':
-
-        # Get index of latest customer added to list
-        intLastCustomer = (len(Customers)) - 1
-        
+    strStartRental = input("Would you like to start your rental? Y/N: ")
+    if strStartRental.upper() == 'Y':
         # Attempt to start rental based on availability
-        blnSuccessfulRental = Customers[intLastCustomer].RentItems(intSkis, intSnowboards)
+        blnSuccessfulRental = Customer.RentItems(Customers[-1], intSkis, intSnowboards)
         if blnSuccessfulRental == True:
-
             # Skis/Snowboards available, get starting rental time
             now = datetime.now()
             dtmDateTimeRented = now.strftime("%m/%d/%Y %H:%M")
             print("")
-            print("Rental has started. Time: ", dtmDateTimeRented)
-
+            print("Your rental has started. Time: ", dtmDateTimeRented)
         else:
-
             # Display available skis and snowboards and ask to try again.
             intAvailableSkis = RentalShop.GetAvailableSkis()
             intAvailableSnowboards = RentalShop.GetAvailableSnowboards()
             print("")
-            print("Sorry, only ", intAvailableSkis, " skis and ", intAvailableSnowboards, " snowboards are available.")
-
+            print("Sorry, we only have ", intAvailableSkis, " skis and ", intAvailableSnowboards, " snowboards available.")
             # Give option to try another rental
             intNavigate = input("Enter 1 to try another rental.")
             MenuSelect(1)
-
     else:
         print("Rental canceled.")
         # Do not continue with rental, option to go back to main menu
         intNavigate = input("Enter 0 to go back to Main Menu.")
-        MenuSelect(intNavigate)
+        MenuSelect(0)
 
     intNavigate = input("Enter 0 to go back to Main Menu.")
     Menu(intNavigate) 
@@ -130,14 +120,32 @@ def NewCustomerRental(Customers, strFirstName, strLastName, strIDNumber, strPhon
 # Function to Return Rental
 # ---------------------------------------------------------------
 
-def ReturnRental(Customers):
-    strPhoneNumber = input("Enter phone number: ")
+def ReturnRental(strIDNumber):
     for obj in Customers:
-        if strPhoneNumber == obj.strPhoneNumber:
-            print(obj.FirstName)
-    print("")
-    intNavigate = input("Enter 0 to go back to Main Menu.")
-    Menu(intNavigate) 
+            if strIDNumber == obj.strIDNumber:
+                strFirstName = obj.strFirstName
+                strLastName = obj.strLastName
+                strIDNumber = obj.strIDNumber
+                strCouponCode = obj.strCouponCode
+                strRentalPeriod = obj.strRentalPeriod
+                intSkis = Customer.GetSkisRented(obj)
+                intSnowboards = Customer.GetSnowboardsRented(obj)
+                intDays = int(input("How many days ago did your rental start? "))
+                intHours = int(input("How many hours ago did your rental start? "))
+                dtmRentalStart = (datetime.now() + timedelta(days=-intDays) + timedelta(hours=-intHours))
+                dtmRentalStart = str(dtmRentalStart)[:-10]
+                dtmRentalStart = datetime.strptime(dtmRentalStart, "%Y-%m-%d %H:%M")
+                print("Name: " + str(strFirstName) + " " + str(strLastName))
+                print("Phone Number: " + str(strIDNumber))
+                print("Coupon Code: " + str(strCouponCode))
+                print("Rental Period: " + str(strRentalPeriod))
+                print("Skis Rented: " + str(intSkis))
+                print("Snowboards Rented: " + str(intSnowboards))
+                dblSubtotal, dblDiscountTotal, dblTotal = RentalShop.CalculateBill(obj, dtmRentalStart, intSkis, intSnowboards, strCouponCode)
+                print("Subtotal: " + dblSubtotal)
+                print("Discount: " + dblDiscountTotal)
+                print("Grand Total: " + dblTotal)
+
 
 
 
