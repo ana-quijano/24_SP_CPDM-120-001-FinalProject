@@ -1,4 +1,6 @@
-from datetime import datetime
+import math
+import datetime
+from datetime import datetime, timedelta
 
 class RentalShop():
     'Class for rental shops that rent out skis and snowboards'
@@ -122,11 +124,14 @@ class RentalShop():
     # Abstract: Takes two dates and converts them to hours, days, weeks
     # returns 3 integers hours, days, weeks
     # ####################################################################
-    def ConvertDateToTimeUnits(self, dtmDateTimeRented, dtmDateTimeReturned):
-        intTimeUnitsRented = dtmDateTimeReturned - dtmDateTimeRented
-        
-        intHours = int((intTimeUnitsRented.seconds / 3600) + (intTimeUnitsRented.days * 24))
-        intDays = int(0)
+    def ConvertDateToTimeUnits(dtmDateTimeRented, dtmDateTimeReturned):
+        #intTimeUnitsRented = dtmDateTimeReturned - dtmDateTimeRented
+        #dtmDateTimeRented = datetime.strptime(dtmDateTimeRented, "%Y-%m-%d %H:%M")
+        #dtmDateTimeReturned = datetime.strptime(dtmDateTimeReturned, "%Y-%m-%d %H:%M")
+        intHours = (abs(dtmDateTimeReturned.hour - dtmDateTimeRented.hour))
+        intDays = (abs(dtmDateTimeReturned.day - dtmDateTimeRented.day))
+        #intHours = int((intTimeUnitsRented.seconds / 3600) + (intTimeUnitsRented.days * 24))
+        #intDays = int(0)
         intWeeks = int(0)
     
         while intHours >= 24:
@@ -178,17 +183,21 @@ class RentalShop():
     # Abstract: Takes the dates, units rented, and coupon code and 
     # calculates the final bill returns a float
     # ####################################################################
-    def CalculateBill(self, dtmDateTimeRented, dtmDateTimeReturned, intSkis = 0, intSnowboards = 0, strCouponCode = ""):
+    def CalculateBill(self, dtmDateTimeRented, intSkis = 0, intSnowboards = 0, strCouponCode = ""):
         intHours = int(0)
         intDays = int(0)
         intWeeks= int(0)
         
         dblTotal = float(0)
 
-        intHours, intDays, intWeeks = self.ConvertDateToTimeUnits(dtmDateTimeRented, dtmDateTimeReturned)
+        dtmDateTimeReturned = datetime.now()
+        dtmDateTimeReturned = str(dtmDateTimeReturned)[:-10]
+        dtmDateTimeReturned = datetime.strptime(dtmDateTimeReturned, "%Y-%m-%d %H:%M")
+
+        intHours, intDays, intWeeks = RentalShop.ConvertDateToTimeUnits(dtmDateTimeRented, dtmDateTimeReturned)
         
-        dblSubtotal = self._CalculateSubTotal(intHours, intDays, intWeeks, intSkis, intSnowboards)        
-        dblDiscountTotal = self._CalculateFamilyDiscount(intHours, intDays, intWeeks, intSkis, intSnowboards) + self._CalculateCouponDiscount(strCouponCode, dblSubtotal)
+        dblSubtotal = RentalShop._CalculateSubTotal(intHours, intDays, intWeeks, intSkis, intSnowboards)        
+        dblDiscountTotal = RentalShop._CalculateFamilyDiscount(intHours, intDays, intWeeks, intSkis, intSnowboards) + RentalShop._CalculateCouponDiscount(strCouponCode, dblSubtotal)
         dblTotal = dblSubtotal - dblDiscountTotal
         
         RentalShop._dblDailyRevenue += dblTotal
