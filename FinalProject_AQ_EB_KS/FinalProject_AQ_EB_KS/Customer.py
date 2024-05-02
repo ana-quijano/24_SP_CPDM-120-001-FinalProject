@@ -44,7 +44,7 @@ class Customer():
         elif type(strLastName) != str:
             raise Exception("Last Name Must be a string")
         else:
-            self._strFirstName = strLastName
+            self._strLastName = strLastName
             
 
 
