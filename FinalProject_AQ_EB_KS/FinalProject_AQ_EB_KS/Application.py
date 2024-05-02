@@ -1,6 +1,6 @@
 from RentalShop import RentalShop
 from Customer import Customer
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 # ---------------------------------------------------------------
@@ -88,7 +88,7 @@ def NewCustomerRental(Customers, strFirstName, strLastName, strIDNumber, strPhon
 
     # Confirm rental
     strStartRental = input("Start Rental? Y/N: ")
-    if strStartRental.upper == 'Y':
+    if strStartRental == 'Y':
 
         # Get index of latest customer added to list
         intLastCustomer = (len(Customers)) - 1
@@ -131,10 +131,40 @@ def NewCustomerRental(Customers, strFirstName, strLastName, strIDNumber, strPhon
 # ---------------------------------------------------------------
 
 def ReturnRental(Customers):
-    strPhoneNumber = input("Enter phone number: ")
+
+    strIDNumber = input("Enter ID Number: ")
     for obj in Customers:
-        if strPhoneNumber == obj.strPhoneNumber:
-            print(obj.FirstName)
+        if strIDNumber == obj.strIDNumber:
+
+            # Get customer information
+            strFirstName = obj.strFirstName
+            strLastName = obj.strLastName
+            intSkis = obj.GetSkisRented()
+            intSnowboards = obj.GetSnowboardsRented()
+            strCouponCode = obj._strCouponCode
+
+            # Get time rented and time returned
+            now = datetime.now()
+            dtmDateTimeRented = now.strftime("%m/%d/%Y %H:%M")
+
+            dtmDateTimeReturned = timedelta(hours=-2)
+
+            ## Get Subtotal, DiscountTotal, Total
+            #(dblSubtotal, dblDiscountTotal, dblTotal) = Inventory.CalculateBill(dtmDateTimeRented, dtmDateTimeReturned, intSkis, intSnowboards, strCouponCode)
+
+            # Display Invoice
+            print("")
+            print("Name: ", strFirstName, " ", strLastName)
+            print("Skis Rented: ", intSkis)
+            print("Snowboards Rented: ", intSnowboards)
+            print("Total Time of Rental: ")
+            print("Subtotal: ")
+            print("Discount: ")
+            print("Total: ")
+
+            # Return rented skis and snowboards to inventory
+            obj.ReturnItems()
+
     print("")
     intNavigate = input("Enter 0 to go back to Main Menu.")
     Menu(intNavigate) 
