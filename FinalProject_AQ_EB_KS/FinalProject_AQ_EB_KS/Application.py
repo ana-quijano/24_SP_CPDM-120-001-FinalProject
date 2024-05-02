@@ -100,11 +100,11 @@ def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, st
             print("Sorry, we only have ", intAvailableSkis, " skis and ", intAvailableSnowboards, " snowboards available.")
             # Give option to try another rental
             intNavigate = input("Enter 1 to try another rental.")
-            MenuSelect(intNavigate)
+            MenuSelect(1)
     else:
         # Do not continue with rental, option to go back to main menu
         intNavigate = input("Enter 0 to go back to Main Menu.")
-        MenuSelect(intNavigate)
+        MenuSelect(0)
 
     intNavigate = input("Enter 0 to go back to Main Menu.")
     Menu(intNavigate) 
