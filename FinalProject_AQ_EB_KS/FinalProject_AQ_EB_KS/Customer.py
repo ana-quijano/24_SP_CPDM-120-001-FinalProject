@@ -161,7 +161,7 @@ class Customer():
     # Name: Get Snowboards Rented
     # Abstract: Gets the amount of snowboards the customer has rented
     # ####################################################################
-    def GetSkisRented(self):
+    def GetSnowboardsRented(self):
         return self._intSnowboardsRented
     
 
