@@ -1,56 +1,123 @@
 from RentalShop import RentalShop
 from Customer import Customer
-import msvcrt
+from datetime import datetime
 
 
 # ---------------------------------------------------------------
 # Function to set up the Ski and Snowboard Shop inventory
 # ---------------------------------------------------------------
 
-def SetUp_ShopInventory(intTotalSkis, intTotalSnowboards, blnShopOpen):
-    Inventory = RentalShop(intTotalSkis, intTotalSnowboards)
-    print("Bob's Skis and Snowboards Shop is now open!\n")
-    print("There are ", intTotalSkis, " skis and ", intTotalSnowboards, " in the inventory.\n")
-    blnShopOpen = True
-    return blnShopOpen
+def SetUp_ShopInventory(intTotalSkis, intTotalSnowboards):
+    print("")
+    print("Bob's Skis and Snowboards Shop is now open.")
+    print("There are ", intTotalSkis, " skis and ", intTotalSnowboards, " in the inventory.")
+
+
 
 # ---------------------------------------------------------------
 # Function to Display Navigational Selection
 # display options for navigation and 
 # ---------------------------------------------------------------
-def NavigationalSelection(intNavigate):
+
+def Menu(intNavigate):
+    print("")
     intNavigate = input("For New Customer Rental, enter 1.\nTo Return Rental, enter 2.\nTo Display Inventory, enter 3. \nTo Close Shop at End of Day, enter 4.\n")
     intNavigate = Validate_Navigation(intNavigate)
-    return intNavigate 
+    MenuSelect(intNavigate)
+
+def MenuSelect(intNavigate):
+    if intNavigate == 1:
+    # Collect New Customer Rental Inputs
+        NewCustomerRental(strFirstName = "", strLastName = "", strIDNumber = "", strPhoneNumber = "", strCouponCode = "", strRentalPeriod = "", intTime = 0, intSkis = 0, intSnowboards = 0)
+    else:
+        # This does not work yet
+        if intNavigate == 2:
+            ReturnRental()
+        else:
+            # This works!
+            if intNavigate == 3:
+                DisplayInventory(intAvailableSkis = 0, intAvailableSnowboards = 0)
+            else:
+                # This does not work yet
+                if intNavigate == 4:
+                    CloseShop()
+                else:
+                    if intNavigate == 0:
+                        Menu(intNavigate)
+
+
 
 # ---------------------------------------------------------------
 # Function to Begin New Customer Rental
 # ---------------------------------------------------------------
 
-def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalRate, intTime, intSkis, intSnowboards, dblEstimate):
+def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod, intTime, intSkis, intSnowboards):
     print("")
-    print("Enter Customer Rental Request Details Details")
+    print("Enter Customer Rental Details")
     strFirstName = input("First Name: ")
     strLastName = input("Last Name: ")
     strIDNumber = input("ID Number: ")
     strPhoneNumber = input("Phone Number: ")
     strCouponCode = input("Coupon Code: ")
-    strRentalRate = input("Rental Period (Hourly, Daily, or Weekly): ")
-    intTime = input("Rental Time: ")
-    intSkis = input("Number of Skis: ")
-    intSnowboards = input("Numbber of Snowboards: ")
-    print("strRentalRate: ", strRentalRate)
-    print (strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalRate, intTime, intSkis, intSnowboards)
-    dblEstimate = RentalShop.CalculateEstimate(strRentalRate, intSkis, intSnowboards, intTime, strCouponCode)
-    print("Rental Price Estimate: ", dblEstimate)
+    strRentalPeriod = input("Rental Period (Hourly, Daily, or Weekly): ")
+    intTime = int(input("Rental Time: "))
+    intSkis = int(input("Number of Skis: "))
+    intSnowboards = int(input("Number of Snowboards: "))
     print("")
+
+    dblEstimate = float(0)
+    dtmDateTimeRented = str("")
+    dtmDateTimeReturned = str("")
+    intAvailableSkis = int()
+    intAvailableSnowboards = int()
+
+    # I am just laying out the logic
+    # I don't know how to put each new customer into a list
+    # ----------------------------------------------------------------------------
+
+    # Instantiate customer class
+    customer = Customer(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod)
+
+    # Give estimate
+    dblEstimate = Inventory.CalculateEstimate(strRentalPeriod, intSkis, intSnowboards, intTime, strCouponCode)
+    print("Rental Price Estimate: ", dblEstimate)
+    # Confirm rental
+    strStartRental = input("Would you like to start your rental? Y/N: ")
+    if strStartRental == 'Y':
+        # Attempt to start rental based on availability
+        blnSuccessfulRental = customer.RentItems(intSkis, intSnowboards)
+        if blnSuccessfulRental == True:
+            # Skis/Snowboards available, get starting rental time
+            now = datetime.now()
+            dtmDateTimeRented = now.strftime("%m/%d/%Y %H:%M")
+            print("")
+            print("Your rental has started. Time: ", dtmDateTimeRented)
+        else:
+            # Display available skis and snowboards and ask to try again.
+            intAvailableSkis = RentalShop.GetAvailableSkis()
+            intAvailableSnowboards = RentalShop.GetAvailableSnowboards()
+            print("")
+            print("Sorry, we only have ", intAvailableSkis, " skis and ", intAvailableSnowboards, " snowboards available.")
+            # Give option to try another rental
+            intNavigate = input("Enter 1 to try another rental.")
+            MenuSelect(intNavigate)
+    else:
+        # Do not continue with rental, option to go back to main menu
+        intNavigate = input("Enter 0 to go back to Main Menu.")
+        MenuSelect(intNavigate)
+
+    intNavigate = input("Enter 0 to go back to Main Menu.")
+    Menu(intNavigate) 
+
+
 
 # ---------------------------------------------------------------
 # Function to Return Rental
 # ---------------------------------------------------------------
 
 def ReturnRental():
-    print("Under construction.\n")
+    print("...")
+
 
 
 # ---------------------------------------------------------------
@@ -65,15 +132,26 @@ def DisplayInventory(intAvailableSkis, intAvailableSnowboards):
     print("  Available Skis: ", intAvailableSkis)
     print("  Available Snowboards: ", intAvailableSnowboards)
     print("")
+    intNavigate = input("Enter 0 to go back to Main Menu.")
+    Menu(intNavigate)
+
+
 
 # ---------------------------------------------------------------
 # Function to Close Shop
 # ---------------------------------------------------------------
 
-def CloseShop(blnShopOpen):
-    print("Shop is now closed.\n")
-    blnShopOpen = False
-    return blnShopOpen
+def CloseShop():
+    dblDailyRevenue = RentalShop.GetDailyRevenue()
+    intDailySkisRented = RentalShop.GetDailySkisRented()
+    intDailySnowboardsRented = RentalShop.GetDailySnowboardsRented()
+    print("")
+    print("Daily Summary")
+    print("  Total Revenue: ", dblDailyRevenue)
+    print("  Total Skis Rented: ", intDailySkisRented)
+    print("  Total Snowboards Rented: ", intDailySnowboardsRented)
+    print("Bob's Skis and Snowboards Rental Shop is now closed.\n")
+
 
 
 # ---------------------------------------------------------------
@@ -117,6 +195,8 @@ def Validate_Navigation(intInput):
         intInput = int(0)
         print("Selection must be 1, 2, 3, or 4.")
 
+
+
 # ---------------------------------------------------------------
 #
 # Main Control
@@ -134,9 +214,16 @@ strNavigateFlag = bool(False)
 intNavigate = int()
 intMain = int(1)
 
+intAvailableSkis = int()
+intAvailableSnowboards = int()
+
+Customers = []
+Day = []
+
 # ---------------------------------------------------------------
 # Get and Validate RentalShop Class Inputs
 # ---------------------------------------------------------------
+print ("")
 
 while strInitialSkisFlag is False:
     intTotalSkis = input("Enter Number of Skis in Inventory: ")
@@ -150,29 +237,15 @@ while strInitialSnowboardsFlag is False:
 # Call Functions
 # ---------------------------------------------------------------
 
-# Call function to instantiate class RentalShop
-SetUp_ShopInventory(intTotalSkis, intTotalSnowboards, blnShopOpen)
+# Instantiate class RentalShop
+Inventory = RentalShop(intTotalSkis, intTotalSnowboards)
+SetUp_ShopInventory(intTotalSkis, intTotalSnowboards)
 
 # Get intNavigate to determine next action
 #(1 for new customer rental, 2 for return rental, 3 for inventory display, 4 for close shop)
-# intNavigate = NavigationalSelection(intNavigate)
+intNavigate = Menu(intNavigate)
 
 # Depending on action selected, call appropriate function
-intNavigate = NavigationalSelection(intNavigate)
+MenuSelect(intNavigate)
 
-if intNavigate == 1:
-    # add new customer to a list of customers
-    NewCustomerRental(strFirstName = "", strLastName = "", strIDNumber = "", strPhoneNumber = "", strCouponCode = "", strRentalRate = "", intTime = 0, intSkis = 0, intSnowboards = 0, dblEstimate = 0)
-else:
-    # This does not work yet
-    if intNavigate == 2:
-        ReturnRental()
-    else:
-        # This works!
-        if intNavigate == 3:
-            DisplayInventory(intAvailableSkis = 0, intAvailableSnowboards = 0)
-        else:
-            # This does not work yet
-            if intNavigate == 4:
-                CloseShop()
                 
