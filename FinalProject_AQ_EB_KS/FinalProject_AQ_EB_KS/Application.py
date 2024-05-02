@@ -75,8 +75,9 @@ def NewCustomerRental(strFirstName, strLastName, strIDNumber, strPhoneNumber, st
     # I don't know how to put each new customer into a list
     # ----------------------------------------------------------------------------
 
-    # Instantiate customer class
-    customer = Customer(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod)
+    # Add object to list Customers
+    Customers.append(Customer(strFirstName, strLastName, strIDNumber, strPhoneNumber, strCouponCode, strRentalPeriod))
+    # print(Customers[0].strFirstName)
 
     # Give estimate
     dblEstimate = Inventory.CalculateEstimate(strRentalPeriod, intSkis, intSnowboards, intTime, strCouponCode)
