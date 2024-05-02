@@ -9,7 +9,7 @@ class Customer():
         self._strLastName = strLastName
         self._strIDNumber = strIDNumber
         self._strPhoneNumber = strPhoneNumber
-        self._strCouponCode = strCouponCode
+        self.strCouponCode = strCouponCode
         self._intSkisRented = int(0)
         self._intSnowboardsRented = int(0)
         self._strRentalPeriod = strRentalPeriod
