@@ -88,7 +88,7 @@ def NewCustomerRental(Customers, strFirstName, strLastName, strIDNumber, strPhon
 
     # Confirm rental
     strStartRental = input("Start Rental? Y/N: ")
-    if strStartRental == 'Y':
+    if strStartRental.upper == 'Y':
 
         # Get index of latest customer added to list
         intLastCustomer = (len(Customers)) - 1
@@ -116,7 +116,7 @@ def NewCustomerRental(Customers, strFirstName, strLastName, strIDNumber, strPhon
             MenuSelect(1)
 
     else:
-
+        print("Rental canceled.")
         # Do not continue with rental, option to go back to main menu
         intNavigate = input("Enter 0 to go back to Main Menu.")
         MenuSelect(intNavigate)
